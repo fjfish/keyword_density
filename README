@@ -1,0 +1,12 @@
+KeywordDensity
+==============
+
+Simple rails plugin that will count words of more than two characters in a string. 
+It uses a stop list, which can be supplied by the user. Options exist to give, say, 
+the top 5 keywords and their relative frequency.
+
+The purpose is to rank content for pushing to a suite of sister sites. 
+
+caveats:
+
+Assumes the content is free of tags.
