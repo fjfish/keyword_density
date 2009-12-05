@@ -1,12 +1,28 @@
 KeywordDensity
 ==============
 
-Simple rails plugin that will count words of more than two characters in a string. 
-It uses a stop list, which can be supplied by the user. Options exist to give, say, 
+Simple rails plugin that will count words of more than two characters in a string.
+It uses a stop list, which can be supplied by the user. Options exist to give, say,
 the top 5 keywords and their relative frequency.
 
-The purpose is to rank content for pushing to a suite of sister sites. 
+The purpose is to rank content for pushing to a suite of sister sites.
 
 caveats:
 
 Assumes the content is free of tags.
+
+Example Useage:
+===============
+
+    # Remove the HTML from content in @page
+    @page_no_tags ||= @page.gsub(/\<style.*?\<\/style\>/mi,'').gsub(/\<script.*?\<\/script\>/mi,'').
+      gsub(/<\/?[a-z][a-z0-9[:space:]]*[^<>]*>/, '').gsub( /&[^;]+;|[\r\n]/,'').gsub( /[<>]*/, '').strip
+    # Create a new object
+    density = KeywordDensity.new
+    # populate it
+    density.get_keyword_density(@page_no_tags)
+    # Get the single words that occur more than 4 times
+    # More than 14 it's probably some noise
+    @keywords_for_cloud = density.words_count.select {|x,y| x.size == 1 && y > 4 && y < 15}
+    # take this array, sort it by most frequent first and return the first 5 - this is old code that isn't very good
+    @keywords_for_cloud = @keywords_for_cloud.sort { |l,h| h[1] <=> l[1] }[0..5].collect { |x| x[0] }.flatten.join(" ")
